@@ -1,2 +1,4 @@
 requests
 fastapi[standard]
+aiohttp
+aiohttp
