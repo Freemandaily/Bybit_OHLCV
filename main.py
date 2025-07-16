@@ -58,7 +58,12 @@ async def tickerRequests(symbol:str,paired:str|None=None):
         async with session.get(url=url,params=params) as response:
             if response.status == 200:
                 result = await response.json()
-                return result
+                if result['restMsg'] == 'OK':
+                    try:
+                        symbol = result['result']['list'][0]['symbol']
+                        return symbol
+                    except:
+                        return {'Error':'No matching pairs'}
             return {'Error':f'Unable To Fetch Ticker.Error Code {response.status}'}
    
 
