@@ -1,4 +1,4 @@
-import requests
+import requests,asyncio,aiohttp
 import time,logging
 from fastapi import FastAPI
 
@@ -41,4 +41,31 @@ def get_bybit_price_ohlcv(
     data = response.json()
     logging.info(f"Successfuflly Fetched Price For Symbol: {symbol} with Interval: {interval}")
     return data
-    
+#-------------------------------------------------------------------------------------------------------------------------  
+
+async def tickerRequests(symbol:str,paired:str|None=None):
+    url = 'https://api.bybit.com/v5/market/tickers'
+    if paired:
+        pair = f'{symbol.upper()}{paired.upper()}'
+    else:
+        paired = 'USDT'
+        pair = f'{symbol.upper()}{paired.upper()}'
+    params = {
+    'category':'spot',
+    'symbol':pair
+    }
+    async with aiohttp.ClientSession() as session:
+        async with session.get(url=url,params=params) as response:
+            if response.status == 200:
+                result = await response.json()
+                return result
+            return {'Error':f'Unable To Fetch Ticker.Error Code {response.status}'}
+   
+
+@app.get('/bybit/tickers/')
+async def search_Ticker(symbol:str,paired:str|None=None):
+    if paired:
+        ticker_info = await asyncio.create_task(tickerRequests(symbol=symbol,paired=paired))
+        return ticker_info
+    ticker_info = await asyncio.create_task(tickerRequests(symbol=symbol))
+    return ticker_info
