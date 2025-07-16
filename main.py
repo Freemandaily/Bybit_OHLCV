@@ -24,16 +24,16 @@ def get_bybit_price_ohlcv(
         logging.info("Checking if Bybit API is alive...")
         return {"status": "API is alive"}
     
-    url = "https://api.bybit.com/v5/market/kline"
-    params = {
-        "symbol": symbol,
-        "interval": interval,
-        "start": start_time,
-        "end": end_time,
-        "limit": limit
-    }
+    url = f"https://api.bybit.com/v5/market/kline/?symbol={symbol}&interval{interval}&start={start_time}&end={end_time}&limt={limit}"
+    # params = {
+    #     "symbol": symbol,
+    #     "interval": interval,
+    #     "start": start_time,
+    #     "end": end_time,
+    #     "limit": limit
+    # }
 
-    response = requests.get(url, params=params)
+    response = requests.get(url)
     if response.status_code != 200:
         return {"error": f"Failed to fetch data: {response.status_code}"}
     data = response.json()
