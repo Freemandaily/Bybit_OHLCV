@@ -58,7 +58,7 @@ async def tickerRequests(symbol:str,paired:str|None=None):
         async with session.get(url=url,params=params) as response:
             if response.status == 200:
                 result = await response.json()
-                if result['restMsg'] == 'OK':
+                if result['retMsg'] == 'OK':
                     try:
                         symbol = result['result']['list'][0]['symbol']
                         return symbol
