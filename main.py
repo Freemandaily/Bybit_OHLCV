@@ -14,7 +14,6 @@ app  = FastAPI()
 @app.get("/bybit/ohlcv")
 def get_bybit_price_ohlcv(
     symbol="BTCUSDT",
-    category="linear",
     interval="15",       
     start_time=None,
     end_time=None,
@@ -28,7 +27,6 @@ def get_bybit_price_ohlcv(
     url = "https://api.bybit.com/v5/market/kline"
     params = {
         "symbol": symbol,
-        "category": category,
         "interval": interval,
         "start": start_time,
         "end": end_time,
