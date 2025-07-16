@@ -24,7 +24,7 @@ def get_bybit_price_ohlcv(
         logging.info("Checking if Bybit API is alive...")
         return {"status": "API is alive"}
       
-    url = f"https://api.bybit.com/v5/market/kline?symbol={symbol}&interval={interval}&start={start_time}&end={end_time}&limt={limit}"
+    url = f"https://api.bybit.com/v5/market/kline?symbol={symbol}&interval={interval}&start={start_time}&end={end_time}&limit={limit}"
     # params = {
     #     "symbol": symbol,
     #     "interval": interval,
