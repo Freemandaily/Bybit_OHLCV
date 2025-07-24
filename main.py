@@ -74,3 +74,38 @@ async def search_Ticker(symbol:str,paired:str|None=None):
         return ticker_info
     ticker_info = await asyncio.create_task(tickerRequests(symbol=symbol))
     return ticker_info
+
+
+
+
+@app.get('/binance')
+def binace_data():
+    url = 'https://api.binance.com/api/v3/tickers'
+    pair = 'BTCUSDT'
+    params = {
+        'category':'spot',
+        'symbol':pair
+        }
+    try:
+        response = requests.get(url,params=params)
+        return response.json()
+    except:
+        return {'Error':response.status_code}
+
+@app.get('/binance/candle')
+def binace_data():
+    url = 'https://api.binance.com/api/v3/klines'
+    symbol = 'BTCUSDT'
+    params = {
+            'category':'spot',
+            "symbol": symbol,
+            "interval": 1,
+            "start": 1753039200000,
+            "end": 1753100400000,
+            "limit": 100
+        }
+    try:
+        response = requests.get(url,params=params)
+        return response.json()
+    except:
+        return {'Error':response.status_code}
