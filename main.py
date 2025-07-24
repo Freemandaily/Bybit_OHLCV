@@ -77,9 +77,9 @@ async def search_Ticker(symbol:str,paired:str|None=None):
 
 
 @app.get('/binance')
-def binace_data():
+def binace_data(symbol:str):
     url = 'https://api.binance.com/api/v3/ticker/price'
-    pair = 'BTCUSDT'
+    pair = f'{symbol}USDT'
     params = {
         'symbol':pair
         }
