@@ -76,14 +76,11 @@ async def search_Ticker(symbol:str,paired:str|None=None):
     return ticker_info
 
 
-
-
 @app.get('/binance')
 def binace_data():
-    url = 'https://api.binance.com/api/v3/tickers'
+    url = 'https://api.binance.us/api/v3/ticker/price'
     pair = 'BTCUSDT'
     params = {
-        'category':'spot',
         'symbol':pair
         }
     try:
@@ -92,16 +89,16 @@ def binace_data():
     except:
         return {'Error':response.status_code}
 
+
 @app.get('/binance/candle')
 def binace_data():
-    url = 'https://api.binance.com/api/v3/klines'
+    url = 'https://api.binance.us/api/v3/klines'
     symbol = 'BTCUSDT'
     params = {
-            'category':'spot',
             "symbol": symbol,
-            "interval": 1,
-            "start": 1753039200000,
-            "end": 1753100400000,
+            "interval": '1m',
+            "startTime": 1753039200000,
+            "endTime": 1753100400000,
             "limit": 100
         }
     try:
