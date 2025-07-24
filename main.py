@@ -105,7 +105,6 @@ async def get_binance_price_ohlcv(
     limit=1000
     ):
     url = 'https://api.binance.com/api/v3/klines'
-    symbol = 'BTCUSDT'
     params = {
             "symbol": symbol,
             "interval": interval,
