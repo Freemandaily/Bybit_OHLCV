@@ -271,12 +271,12 @@ async def fetchPrice(network,pair,tweeted_date,timeframe,poolId):
             return pair_price_data
 
     # def process_pair(pair,tweeted_date,timeframe):
-    async def process_pair(network,pair,tweeted_date,timeframe,poolId):
-        from_timestamp,to_timestamp = process_date_time(tweeted_date,timeframe)
+     async def process_pair(network,pair,tweeted_date,timeframe,poolId):
+        from_timestamp,to_timestamp = process_date_time(tweeted_date,int(timeframe))
         # pair_price_data = asyncio.run(main(network,pair,from_timestamp,to_timestamp,timeframe,poolId))
         pair_price_data = await main(network,pair,from_timestamp,to_timestamp,timeframe,poolId)
         return pair_price_data
-    price_timeframes = await process_pair(network,pair,tweeted_date,timeframe,poolId)
+    price_timeframes = await process_pair(network,pair,tweeted_date,int(timeframe),poolId)
     return price_timeframes  
 
 
