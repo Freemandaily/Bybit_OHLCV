@@ -121,7 +121,7 @@ async def get_binance_price_ohlcv(
     return data
 
 
-@app.get('onchain_price')
+@app.get('/onchain_price')
 def fetchPrice(network,pair,tweeted_date,timeframe,poolId): 
     async def Priceswharehouse(session,from_timestamp,to_timestamp,poolId):
         # headers = {
