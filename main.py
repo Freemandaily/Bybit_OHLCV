@@ -122,7 +122,7 @@ async def get_binance_price_ohlcv(
 
 
 @app.get('/onchain_price')
-def fetchPrice(network,pair,tweeted_date,timeframe,poolId): 
+async def fetchPrice(network,pair,tweeted_date,timeframe,poolId): 
     async def Priceswharehouse(session,from_timestamp,to_timestamp,poolId):
         # headers = {
         #     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
@@ -271,11 +271,12 @@ def fetchPrice(network,pair,tweeted_date,timeframe,poolId):
             return pair_price_data
 
     # def process_pair(pair,tweeted_date,timeframe):
-    def process_pair(network,pair,tweeted_date,timeframe,poolId):
+    async def process_pair(network,pair,tweeted_date,timeframe,poolId):
         from_timestamp,to_timestamp = process_date_time(tweeted_date,timeframe)
-        pair_price_data = asyncio.run(main(network,pair,from_timestamp,to_timestamp,timeframe,poolId))
+        # pair_price_data = asyncio.run(main(network,pair,from_timestamp,to_timestamp,timeframe,poolId))
+        pair_price_data = await main(network,pair,from_timestamp,to_timestamp,timeframe,poolId)
         return pair_price_data
-    price_timeframes = process_pair(network,pair,tweeted_date,timeframe,poolId)
+    price_timeframes = await process_pair(network,pair,tweeted_date,timeframe,poolId)
     return price_timeframes  
 
 
