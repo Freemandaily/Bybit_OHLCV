@@ -147,7 +147,7 @@ async def fetchPrice(network,pair,tweeted_date,timeframe,poolId):
         # time.sleep(4)
         for retry in range(retry_time):
             url = f'https://app.geckoterminal.com/api/p1/candlesticks/{poolId}?resolution=1&from_timestamp={from_timestamp}&to_timestamp={to_timestamp}&for_update=false&currency=usd&is_inverted=false'
-           
+            
             async with session.get(url=url,headers=headers) as response:
                 if response.status !=200:
                     logging.warning(f"Fetching Price data with {url} Failed . Retrying for {retry} Times")
@@ -172,6 +172,7 @@ async def fetchPrice(network,pair,tweeted_date,timeframe,poolId):
                     dt = datetime.fromisoformat(date.replace('Z', '+00:00'))
                     unix_timestamp = int(dt.timestamp())
                     new_dates_timestamp.append(unix_timestamp)
+                
                 return price_data,new_dates_timestamp
         
 
@@ -230,6 +231,7 @@ async def fetchPrice(network,pair,tweeted_date,timeframe,poolId):
         try:
             task1 = asyncio.create_task(fetch_ohlc_and_compute(session,network,from_timestamp,to_timestamp,timeframe,poolId))
             time_frame_Task = await task1
+            
             if not time_frame_Task:
                 pass_check = []
                 return pass_check
@@ -244,7 +246,7 @@ async def fetchPrice(network,pair,tweeted_date,timeframe,poolId):
             }}
             return pair_data_info
         except Exception as e:
-            logging.error(f'Please Choose Timeframe Within Token Traded Prices')
+            logging.error(f'Please Choose Timeframe Within Token Traded Prices {e}')
             # st.error(f'Please Choose Timeframe Within Token Traded Prices')
             pass_check = []
             return pass_check
@@ -271,13 +273,13 @@ async def fetchPrice(network,pair,tweeted_date,timeframe,poolId):
             return pair_price_data
 
     # def process_pair(pair,tweeted_date,timeframe):
-     async def process_pair(network,pair,tweeted_date,timeframe,poolId):
+    async def process_pair(network,pair,tweeted_date,timeframe,poolId):
         from_timestamp,to_timestamp = process_date_time(tweeted_date,int(timeframe))
         # pair_price_data = asyncio.run(main(network,pair,from_timestamp,to_timestamp,timeframe,poolId))
         pair_price_data = await main(network,pair,from_timestamp,to_timestamp,timeframe,poolId)
         return pair_price_data
     price_timeframes = await process_pair(network,pair,tweeted_date,int(timeframe),poolId)
-    return price_timeframes  
+    return price_timeframes 
 
 
 # @app.get('/binance')
