@@ -44,6 +44,7 @@ def get_bybit_price_ohlcv(
     for  index ,url in enumerate(urls):
         response = requests.get(url,params=params)
         if response.status_code == 200:
+            logging.info(f"{params}")
             data = response.json()
             logging.info(f"Successfuflly Fetched Price For Symbol: {symbol} with Interval: {interval}")
             return data
@@ -330,4 +331,5 @@ async def fetchPrice(network,pair,tweeted_date,timeframe,poolId):
         return pair_price_data
     price_timeframes = await process_pair(network,pair,tweeted_date,int(timeframe),poolId)
     return price_timeframes 
+
 
