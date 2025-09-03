@@ -306,7 +306,9 @@ def perp(
     data = response.json()
     logging.info(f"Successfuflly Fetched Price For Symbol: {symbol} with Interval: {interval}")
     return data
-    
+
+
+
 
 
 @app.get('/binance/perp')
@@ -317,7 +319,7 @@ async def get_binance_price_ohlcv(
     end_time=None,
     limit=1000
     ):
-    url = 'https://api.binance.com/fapi/v1/klines'
+    url = 'https://fapi.binance.com/fapi/v1/klines'
     params = {
             "symbol": symbol,
             "interval": interval,
@@ -334,7 +336,7 @@ async def get_binance_price_ohlcv(
 
 @app.get('/binance/perp/tickers/')
 async def search_Ticker(symbol:str):
-    url = 'https://api.binance.com/fapi/v1/ticker/price'
+    url = 'https://fapi.binance.com/fapi/v1/ticker/price'
     params = {
         'symbol':f'{symbol.upper()}USDT'
         }
@@ -360,7 +362,7 @@ async def tickerRequests(symbol:str,paired:str|None=None):
         paired = 'USDT'
         pair = f'{symbol.upper()}{paired.upper()}'
     params = {
-    'category':'spot',
+    'category':'linear',
     'symbol':pair
     }
     async with aiohttp.ClientSession() as session:
@@ -374,4 +376,5 @@ async def tickerRequests(symbol:str,paired:str|None=None):
                     except:
                         return {'Error':'No matching pairs'}
             return {'Error':f'Unable To Fetch Ticker.Error Code {response.status}'}
+   
    
