@@ -281,35 +281,30 @@ async def fetchPrice(network,pair,tweeted_date,timeframe,poolId):
     price_timeframes = await process_pair(network,pair,tweeted_date,int(timeframe),poolId)
     return price_timeframes 
 
+@app.get('/perp')
+def perp(
+    symbol="BTCUSDT",
+    interval="15",       
+    start_time=None,
+    end_time=None,
+    limit=1000,
+    checkAlive: bool = False
+):
+    params = {
+        'category':'linear',
+        "symbol": symbol,
+        "interval": interval,
+        "start": start_time,
+        "end": end_time,
+        "limit": limit
+    }
+    url = f"https://api.bybit.com/v5/market/kline"
 
-# @app.get('/binance')
-# def binace_data(symbol:str):
-#     url = 'https://api.binance.com/api/v3/ticker/price'
-#     pair = f'{symbol}USDT'
-#     params = {
-#         'symbol':pair
-#         }
-#     try:
-#         response = requests.get(url,params=params)
-#         return response.json()
-#     except:
-#         return {'Error':response.status_code}
-
-
-# @app.get('/binance/candle')
-# def binace_data():
-#     url = 'https://api.binance.com/api/v3/klines'
-#     symbol = 'BTCUSDT'
-#     params = {
-#             "symbol": symbol,
-#             "interval": '1m',
-#             "startTime": 1753039200000,
-#             "endTime": 1753100400000,
-#             "limit": 100
-#         }
-#     try:
-#         response = requests.get(url,params=params)
-#         return response.json()
-#     except:
-#         return {'Error':response.status_code}
+    response = requests.get(url,params=params)
+    if response.status_code != 200:
+        return {"error": f"Failed to fetch data: {response.status_code}"}
+    data = response.json()
+    logging.info(f"Successfuflly Fetched Price For Symbol: {symbol} with Interval: {interval}")
+    return data
+    
 
