@@ -308,3 +308,70 @@ def perp(
     return data
     
 
+
+@app.get('/binance/perp')
+async def get_binance_price_ohlcv(
+    symbol="BTCUSDT",
+    interval="1m",       
+    start_time=None,
+    end_time=None,
+    limit=1000
+    ):
+    url = 'https://api.binance.com/fapi/v1/klines'
+    params = {
+            "symbol": symbol,
+            "interval": interval,
+            "startTime": start_time,
+            "endTime": end_time,
+            "limit": limit
+        }
+    response = requests.get(url,params=params)
+    if response.status_code != 200:
+        return {"error": f"Failed to fetch data: {response.status_code}"}
+    data = response.json()
+    return data
+
+
+@app.get('/binance/perp/tickers/')
+async def search_Ticker(symbol:str):
+    url = 'https://api.binance.com/fapi/v1/ticker/price'
+    params = {
+        'symbol':f'{symbol.upper()}USDT'
+        }
+    logging.info('About To Fetch Ticker On Binance')
+    async with aiohttp.ClientSession() as session:
+        async with session.get(url=url,params=params) as response:
+            if response.status == 200:
+                result = await response.json()
+                if result['symbol']:
+                    try:
+                        symbol = result['symbol']
+                        return symbol
+                    except:
+                        return {'Error':'No matching pairs'}
+            return {'Error':f'Unable To Fetch Ticker.Error Code {response.status}'}
+        
+@app.get('/bybit_ticker')
+async def tickerRequests(symbol:str,paired:str|None=None):
+    url = 'https://api.bybit.com/v5/market/tickers'
+    if paired:
+        pair = f'{symbol.upper()}{paired.upper()}'
+    else:
+        paired = 'USDT'
+        pair = f'{symbol.upper()}{paired.upper()}'
+    params = {
+    'category':'spot',
+    'symbol':pair
+    }
+    async with aiohttp.ClientSession() as session:
+        async with session.get(url=url,params=params) as response:
+            if response.status == 200:
+                result = await response.json()
+                if result['retMsg'] == 'OK':
+                    try:
+                        symbol = result['result']['list'][0]['symbol']
+                        return symbol
+                    except:
+                        return {'Error':'No matching pairs'}
+            return {'Error':f'Unable To Fetch Ticker.Error Code {response.status}'}
+   
